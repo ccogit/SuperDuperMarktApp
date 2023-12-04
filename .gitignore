@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 mvnw
 mvnw.cmd
+~$*
 
 ### STS ###
 .apt_generated
@@ -33,3 +34,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/documents/.$class_diagram.drawio.dtmp
+/documents/.$class_diagram.drawio.bkp
