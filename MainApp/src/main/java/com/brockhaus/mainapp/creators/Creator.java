@@ -1,21 +1,17 @@
 package com.brockhaus.mainapp.creators;
 
-import com.brockhaus.mainapp.clients.KaeseServiceClient;
-import com.brockhaus.mainapp.clients.WeinServiceClient;
 import com.brockhaus.mainapp.model.Produkt;
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+@Service
 @RequiredArgsConstructor
 public abstract class Creator {
 
-    @Autowired
-    KaeseServiceClient kaeseServiceClient;
-    @Autowired
-    WeinServiceClient weinServiceClient;
     @Autowired
     Faker faker;
 
