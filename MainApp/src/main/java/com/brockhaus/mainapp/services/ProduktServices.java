@@ -1,5 +1,6 @@
 package com.brockhaus.mainapp.services;
 
+import com.brockhaus.mainapp.config.InitialDataGenerator;
 import com.brockhaus.mainapp.model.Produkt;
 import com.brockhaus.mainapp.model.enums.ProduktTyp;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
@@ -39,15 +41,40 @@ public class ProduktServices implements ServicesInterface {
         weinServices.deleteBestand();
     }
 
-    public Map<ProduktTyp, List<Produkt>> getAktuellenBestandGroupedByProdukttyp() {
+    public Map<ProduktTyp, List<Produkt>> getAktuellenBestandGroupedByTypDetails() {
         return getBestand().stream()
                 .collect(Collectors.groupingBy(Produkt::getProduktTyp));
     }
 
-    public void printMapOfProduktTypAndProdukten(Map<ProduktTyp, List<Produkt>> map) {
-        map.forEach((key, value) -> {
-            System.out.println(NEW_LINE + NEW_LINE + key + NEW_LINE);
+    public void printAktuellenBestandByTypDetailsSingleDay() {
+        getAktuellenBestandGroupedByTypDetails().forEach((key, value) -> {
+            System.out.println(NEW_LINE + "---" + key + "---" + NEW_LINE);
+            System.out.printf("%-5s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %n",
+                    "ID",
+                    "BEZEICHNUNG",
+                    "AKT. QUALITAET",
+                    "VERFALLDATUM",
+                    "TAGE BIS VERFALL",
+                    "GRUNDPREIS",
+                    "AKT. PREIS",
+                    "AUSLIEGEND",
+                    "ZU ENTFERNEN");
             value.forEach(System.out::println);
         });
     }
+
+    public void printAktuellenBestandByTypDetailsSequence() {
+        IntStream.range(1, InitialDataGenerator.anzahlTageSimulation).forEach(tag -> {
+                    System.out.println(NEW_LINE +
+                            "Datum: " + InitialDataGenerator.lieferDatum.plusDays(InitialDataGenerator.tageVergangenSeitLieferung) +
+                            " - Tage vergangen seit Lieferung: " + InitialDataGenerator.tageVergangenSeitLieferung);
+                    printAktuellenBestandByTypDetailsSingleDay();
+                    Stream.iterate(1, i -> i < 145, i -> ++i).forEach(i -> System.out.print("_"));
+                    System.out.println(NEW_LINE);
+                    InitialDataGenerator.tageVergangenSeitLieferung++;
+                }
+        );
+    }
+
+
 }
