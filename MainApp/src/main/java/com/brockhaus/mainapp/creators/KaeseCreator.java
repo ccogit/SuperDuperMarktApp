@@ -1,6 +1,7 @@
 package com.brockhaus.mainapp.creators;
 
 import com.brockhaus.mainapp.model.Kaese;
+import com.brockhaus.mainapp.model.Produkt;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,5 +17,10 @@ public class KaeseCreator extends Creator {
                 .verfallDatum(LocalDate.now().plusDays(random.nextInt(50, 100)))
                 .grundpreis(Math.round(100 * random.nextDouble(2, 25)) / 100.00)
                 .build());
+    }
+
+    @Override
+    public void erzeugeProdukt(Produkt produkt) {
+        kaeseServiceClient.saveKaese((Kaese) produkt);
     }
 }
