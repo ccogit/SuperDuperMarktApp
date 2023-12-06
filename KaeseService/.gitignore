@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/kaesedb.lock.db
+/kaesedb.mv.db
+/kaesedb.trace.db

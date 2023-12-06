@@ -1,6 +1,6 @@
 package com.brockhaus.mainapp.services;
 
-import com.brockhaus.mainapp.config.InitialDataGenerator;
+import com.brockhaus.mainapp.model.DailyStatistic;
 import com.brockhaus.mainapp.model.Produkt;
 import com.brockhaus.mainapp.model.enums.ProduktTyp;
 import lombok.NoArgsConstructor;
@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.OptionalDouble;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
 
 @Service
 @NoArgsConstructor
@@ -20,7 +21,6 @@ public class ProduktServices implements ServicesInterface {
 
     WeinServices weinServices;
     KaeseServices kaeseServices;
-    private final String NEW_LINE = System.lineSeparator();
 
     @Autowired
     public ProduktServices(WeinServices weinServices, KaeseServices kaeseServices) {
@@ -32,7 +32,7 @@ public class ProduktServices implements ServicesInterface {
     public List<Produkt> getBestand() {
         return Stream.of(weinServices.getBestand(), kaeseServices.getBestand())
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
@@ -43,38 +43,24 @@ public class ProduktServices implements ServicesInterface {
 
     public Map<ProduktTyp, List<Produkt>> getAktuellenBestandGroupedByTypDetails() {
         return getBestand().stream()
-                .collect(Collectors.groupingBy(Produkt::getProduktTyp));
+                .collect(groupingBy(Produkt::getProduktTyp));
     }
 
-    public void printAktuellenBestandByTypDetailsSingleDay() {
-        getAktuellenBestandGroupedByTypDetails().forEach((key, value) -> {
-            System.out.println(NEW_LINE + "---" + key + "---" + NEW_LINE);
-            System.out.printf("%-5s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %n",
-                    "ID",
-                    "BEZEICHNUNG",
-                    "AKT. QUALITAET",
-                    "VERFALLDATUM",
-                    "TAGE BIS VERFALL",
-                    "GRUNDPREIS",
-                    "AKT. PREIS",
-                    "AUSLIEGEND",
-                    "ZU ENTFERNEN");
-            value.forEach(System.out::println);
-        });
+    public Map<ProduktTyp, List<Produkt>> getRemoveList() {
+        return getBestand().stream()
+                .filter(Produkt::vonAuslageEntfernen)
+                .collect(groupingBy(Produkt::getProduktTyp));
     }
 
-    public void printAktuellenBestandByTypDetailsSequence() {
-        IntStream.range(1, InitialDataGenerator.anzahlTageSimulation).forEach(tag -> {
-                    System.out.println(NEW_LINE +
-                            "Datum: " + InitialDataGenerator.lieferDatum.plusDays(InitialDataGenerator.tageVergangenSeitLieferung) +
-                            " - Tage vergangen seit Lieferung: " + InitialDataGenerator.tageVergangenSeitLieferung);
-                    printAktuellenBestandByTypDetailsSingleDay();
-                    Stream.iterate(1, i -> i < 145, i -> ++i).forEach(i -> System.out.print("_"));
-                    System.out.println(NEW_LINE);
-                    InitialDataGenerator.tageVergangenSeitLieferung++;
-                }
-        );
+    public Map<ProduktTyp, DailyStatistic> getStatistic() {
+        return getBestand().stream()
+                .collect(groupingBy(Produkt::getProduktTyp, collectingAndThen(toList(), list ->
+                        new DailyStatistic(
+                                list.stream().map(Produkt::getId).count(),
+                                list.stream().filter(Produkt::vonAuslageEntfernen).toList().size(),
+                                OptionalDouble.of(Math.round(100 * list.stream().mapToInt(Produkt::getTageBisVerfall).average().orElse(-1)) / 100.00),
+                                OptionalDouble.of(Math.round(100 * list.stream().mapToDouble(Produkt::getQualitaetAktuell).average().orElse(-1)) / 100.00)
+                        ))));
     }
-
 
 }

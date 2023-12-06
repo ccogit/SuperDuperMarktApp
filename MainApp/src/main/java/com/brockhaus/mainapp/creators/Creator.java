@@ -2,6 +2,7 @@ package com.brockhaus.mainapp.creators;
 
 import com.brockhaus.mainapp.clients.KaeseServiceClient;
 import com.brockhaus.mainapp.clients.WeinServiceClient;
+import com.brockhaus.mainapp.model.Produkt;
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +22,6 @@ public abstract class Creator {
     final Random random = new Random();
 
     public abstract void erzeugeProdukt();
+
+    public abstract void erzeugeProdukt(Produkt produkt);
 }

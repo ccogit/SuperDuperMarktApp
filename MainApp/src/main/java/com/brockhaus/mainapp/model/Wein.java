@@ -1,6 +1,6 @@
 package com.brockhaus.mainapp.model;
 
-import com.brockhaus.mainapp.config.InitialDataGenerator;
+import com.brockhaus.mainapp.Starter;
 import com.brockhaus.mainapp.model.enums.ProduktTyp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,7 @@ public class Wein extends Produkt implements Serializable {
 
     @Override
     public int getQualitaetAktuell() {
-        return Math.min(getStartQualitaet() + InitialDataGenerator.tageVergangenSeitLieferung / 10, 50);
+        return Math.min(getStartQualitaet() + Starter.tageVergangenSeitLieferung / 10, 50);
     }
 
     @Override

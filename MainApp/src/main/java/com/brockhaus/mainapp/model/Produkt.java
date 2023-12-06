@@ -1,7 +1,9 @@
 package com.brockhaus.mainapp.model;
 
-import com.brockhaus.mainapp.config.InitialDataGenerator;
+import com.brockhaus.mainapp.Starter;
 import com.brockhaus.mainapp.model.enums.ProduktTyp;
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,14 +19,22 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public abstract class Produkt implements Serializable {
-
+    @CsvBindByName(column = "ID")
     private Long id;
+    @CsvBindByName(column = "BEZEICHNUNG")
     private String bezeichnung;
+    @CsvBindByName(column = "START_QUALITAET")
     private Integer startQualitaet;
+    @CsvDate(value = "yyyy-MM-dd")
+    @CsvBindByName(column = "LIEFER_DATUM")
     @Builder.Default
-    private LocalDate lieferDatum = InitialDataGenerator.lieferDatum;
+    private LocalDate lieferDatum = Starter.lieferDatum;
+    @CsvDate(value = "yyyy-MM-dd")
+    @CsvBindByName(column = "VERFALL_DATUM")
     private LocalDate verfallDatum;
+    @CsvBindByName(column = "GRUNDPREIS")
     private Double grundpreis;
+    @CsvBindByName(column = "AUSLIEGEND")
     @Builder.Default
     private Boolean ausliegend = true;
     private ProduktTyp produktTyp;
@@ -42,7 +52,7 @@ public abstract class Produkt implements Serializable {
     }
 
     public Integer getTageBisVerfall() {
-        return Math.toIntExact(ChronoUnit.DAYS.between(getLieferDatum().plusDays(InitialDataGenerator.tageVergangenSeitLieferung), getVerfallDatum()));
+        return Math.toIntExact(ChronoUnit.DAYS.between(getLieferDatum().plusDays(Starter.tageVergangenSeitLieferung), getVerfallDatum()));
     }
 
     public Boolean verfallDatumErreicht() {
