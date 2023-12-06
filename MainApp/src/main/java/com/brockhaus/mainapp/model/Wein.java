@@ -1,10 +1,10 @@
 package com.brockhaus.mainapp.model;
 
+import com.brockhaus.mainapp.config.InitialDataGenerator;
 import com.brockhaus.mainapp.model.enums.ProduktTyp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
@@ -13,7 +13,6 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-@ToString(callSuper = true)
 public class Wein extends Produkt implements Serializable {
     @Override
     public ProduktTyp getProduktTyp() {
@@ -22,34 +21,22 @@ public class Wein extends Produkt implements Serializable {
 
     @Override
     public Double getPreisAktuell() {
-        return null;
+        return Math.round(100 * (getGrundpreis() + 0.1 * getStartQualitaet())) / 100.00;
     }
 
     @Override
-    public Integer getQualitaetAktuell() {
-        return null;
-//        return getStartQualitaet() + getTageSeitLieferung() / 10;
+    public int getQualitaetAktuell() {
+        return Math.min(getStartQualitaet() + InitialDataGenerator.tageVergangenSeitLieferung / 10, 50);
     }
 
     @Override
-    public Integer getQualitaetspunkteUeberSollNiveau() {
-        return null;
+    public int getPunktabweichungVonSollNiveau() {
+        return getQualitaetAktuell();
     }
 
     @Override
-    public Boolean qualitaetsniveauUnterschritten() {
-        return null;
+    public String toString() {
+        return super.toString();
     }
-
-    @Override
-    public Integer getTageBisVerfall() {
-        return null;
-    }
-
-    @Override
-    public Boolean verfallDatumErreicht() {
-        return null;
-    }
-
-
 }
+

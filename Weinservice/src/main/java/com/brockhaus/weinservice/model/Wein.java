@@ -23,6 +23,7 @@ public class Wein {
     private Integer startQualitaet;
     @Builder.Default
     private LocalDate lieferDatum = LocalDate.now();
+    private LocalDate verfallDatum;
     private Double grundpreis;
     @Builder.Default
     private Boolean ausliegend = true;
