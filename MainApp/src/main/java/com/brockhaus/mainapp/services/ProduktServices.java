@@ -1,10 +1,11 @@
 package com.brockhaus.mainapp.services;
 
+import com.brockhaus.mainapp.clients.KaeseServiceClient;
+import com.brockhaus.mainapp.clients.WeinServiceClient;
 import com.brockhaus.mainapp.model.DailyStatistic;
 import com.brockhaus.mainapp.model.Produkt;
 import com.brockhaus.mainapp.model.enums.ProduktTyp;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,34 +17,27 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.*;
 
 @Service
-@NoArgsConstructor
-public class ProduktServices implements ServicesInterface {
+@RequiredArgsConstructor
+public class ProduktServices {
 
-    WeinServices weinServices;
-    KaeseServices kaeseServices;
+    private final KaeseServiceClient kaeseServiceClient;
+    private final WeinServiceClient weinServiceClient;
 
-    @Autowired
-    public ProduktServices(WeinServices weinServices, KaeseServices kaeseServices) {
-        this.weinServices = weinServices;
-        this.kaeseServices = kaeseServices;
-    }
-
-    @Override
     public List<Produkt> getBestand() {
-        return Stream.of(weinServices.getBestand(), kaeseServices.getBestand())
+        return Stream.of(weinServiceClient.getWeine(), kaeseServiceClient.getKaese())
                 .flatMap(Collection::stream)
                 .collect(toList());
     }
 
-    @Override
     public void deleteBestand() {
-        kaeseServices.deleteBestand();
-        weinServices.deleteBestand();
+        weinServiceClient.deleteWeinAll();
+        kaeseServiceClient.deleteKaeseAll();
     }
 
-    public Map<ProduktTyp, List<Produkt>> getAktuellenBestandGroupedByTypDetails() {
+    public Map<ProduktTyp, Map<Boolean, List<Produkt>>> getAktuellenBestandGroupedByTypDetails() {
         return getBestand().stream()
-                .collect(groupingBy(Produkt::getProduktTyp));
+                .collect(groupingBy(Produkt::getProduktTyp,
+                        groupingBy(Produkt::vonAuslageEntfernen)));
     }
 
     public Map<ProduktTyp, List<Produkt>> getRemoveList() {
@@ -59,7 +53,8 @@ public class ProduktServices implements ServicesInterface {
                                 list.stream().map(Produkt::getId).count(),
                                 list.stream().filter(Produkt::vonAuslageEntfernen).toList().size(),
                                 OptionalDouble.of(Math.round(100 * list.stream().mapToInt(Produkt::getTageBisVerfall).average().orElse(-1)) / 100.00),
-                                OptionalDouble.of(Math.round(100 * list.stream().mapToDouble(Produkt::getQualitaetAktuell).average().orElse(-1)) / 100.00)
+                                OptionalDouble.of(Math.round(100 * list.stream().mapToDouble(Produkt::getQualitaetAktuell).average().orElse(-1)) / 100.00),
+                                Math.round(100 * list.stream().mapToDouble(Produkt::getPreisAktuell).sum()) / 100.00
                         ))));
     }
 

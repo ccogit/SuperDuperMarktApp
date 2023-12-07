@@ -4,48 +4,43 @@ import com.brockhaus.mainapp.Starter;
 import com.brockhaus.mainapp.model.Kaese;
 import com.brockhaus.mainapp.model.Produkt;
 import com.brockhaus.mainapp.model.Wein;
+import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.brockhaus.mainapp.Starter.fileName;
+import static java.lang.System.in;
+
 @Service
+@RequiredArgsConstructor
 public class ScannerUtils {
 
-
-    private final static Scanner scanner = new Scanner(System.in);
-    private static String input = "";
+    private final static Scanner scanner = new Scanner(in);
+    public static String input = "";
 
     public static void readLine() {
         input = scanner.nextLine().trim();
     }
 
-    public static boolean isLongReport() {
-        return "l".equalsIgnoreCase(input) || "long".equalsIgnoreCase(input);
-    }
-
-    public static boolean isShortReport() {
-        return "s".equalsIgnoreCase(input) || "short".equalsIgnoreCase(input);
-    }
-
-    public static boolean isRemoveList() {
-        return "r".equalsIgnoreCase(input) || "remove".equalsIgnoreCase(input);
-    }
-
-    public static boolean isExit() {
-        return "e".equalsIgnoreCase(input) || "exit".equalsIgnoreCase(input);
-    }
-
     public static List<Produkt> getProdukteFromCsv() throws FileNotFoundException {
-        return new CsvToBeanBuilder<Produkt>(new FileReader(Starter.fileName))
+        Reader reader = new BufferedReader(new FileReader(fileName));
+        CsvToBean<Produkt> csvReader = new CsvToBeanBuilder(reader)
                 .withType(Starter.produktTyp.equals("Wein") ? Wein.class : Kaese.class)
-                .build()
-                .parse();
-
+                .withSeparator(',')
+                .withIgnoreLeadingWhiteSpace(true)
+                .withIgnoreEmptyLine(true)
+                .build();
+        return csvReader.parse();
     }
-
-
 }
+
+
+
