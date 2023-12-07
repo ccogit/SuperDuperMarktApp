@@ -3,14 +3,12 @@ package com.brockhaus.mainapp.creators;
 import com.brockhaus.mainapp.clients.KaeseServiceClient;
 import com.brockhaus.mainapp.model.Kaese;
 import com.brockhaus.mainapp.model.Produkt;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Component
-@RequiredArgsConstructor
 public class KaeseCreator extends Creator {
 
     @Autowired

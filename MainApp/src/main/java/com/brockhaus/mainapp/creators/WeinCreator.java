@@ -3,14 +3,12 @@ package com.brockhaus.mainapp.creators;
 import com.brockhaus.mainapp.clients.WeinServiceClient;
 import com.brockhaus.mainapp.model.Produkt;
 import com.brockhaus.mainapp.model.Wein;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Component
-@RequiredArgsConstructor
 public class WeinCreator extends Creator {
 
     @Autowired

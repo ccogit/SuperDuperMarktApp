@@ -1,11 +1,14 @@
 package com.brockhaus.mainapp.model;
 
 import com.brockhaus.mainapp.Starter;
+import com.brockhaus.mainapp.clients.WeinServiceClient;
 import com.brockhaus.mainapp.model.enums.ProduktTyp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -13,7 +16,13 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
+@Component
 public class Wein extends Produkt implements Serializable {
+
+
+    @Autowired
+    WeinServiceClient weinServiceClient;
+
     @Override
     public ProduktTyp getProduktTyp() {
         return ProduktTyp.WEIN;
@@ -21,7 +30,12 @@ public class Wein extends Produkt implements Serializable {
 
     @Override
     public Double getPreisAktuell() {
-        return Math.round(100 * (getGrundpreis() + 0.1 * getStartQualitaet())) / 100.00;
+        /*
+        Der Qualitäts-Zuschlag bei Wein ändert sich nicht über die Zeit, aber er existiert.
+        Abgeleitet von der Startqualität bleibt der initiale Qualitätszuschlag erhalten.
+    */
+        return vonAuslageEntfernen() ? 0.0 :
+                Math.round(100 * (getGrundpreis() + 0.1 * getStartQualitaet())) / 100.00;
     }
 
     @Override

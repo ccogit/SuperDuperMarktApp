@@ -2,11 +2,13 @@ package com.brockhaus.mainapp.clients;
 
 import com.brockhaus.mainapp.model.Kaese;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @FeignClient("KAESE-SERVICE")
+@Service
 @RestController
 public interface KaeseServiceClient {
     @GetMapping("/kaese")
