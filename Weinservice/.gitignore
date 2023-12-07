@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/weindb.lock.db
+/weindb.mv.db
