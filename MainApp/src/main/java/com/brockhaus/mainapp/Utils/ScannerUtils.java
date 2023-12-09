@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.Reader;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,14 +30,14 @@ public class ScannerUtils {
     }
 
     public static List<Produkt> getProdukteFromCsv() throws FileNotFoundException {
-        Reader reader = new BufferedReader(new FileReader(fileName));
-        CsvToBean<Produkt> csvReader = new CsvToBeanBuilder(reader)
+        CsvToBean<Produkt> csvReader = new CsvToBeanBuilder(new BufferedReader(new FileReader(fileName)))
                 .withType(Starter.produktTyp.equals("Wein") ? Wein.class : Kaese.class)
                 .withSeparator(',')
                 .withIgnoreLeadingWhiteSpace(true)
                 .withIgnoreEmptyLine(true)
                 .build();
         return csvReader.parse();
+
     }
 }
 

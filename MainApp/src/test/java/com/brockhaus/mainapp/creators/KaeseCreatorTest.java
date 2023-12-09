@@ -1,13 +1,12 @@
-package com.brockhaus.eurekaserver;
+package com.brockhaus.mainapp.creators;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EurekaServerApplicationTests {
+class KaeseCreatorTest {
 
     @Test
-    void contextLoads() {
+    void erzeugeProdukt() {
     }
-
 }

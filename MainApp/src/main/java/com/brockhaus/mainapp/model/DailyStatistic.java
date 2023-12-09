@@ -11,7 +11,7 @@ public record DailyStatistic(
 
     @Override
     public String toString() {
-        return String.format("%-22s %-24s %-30s %-14s %-30s",
+        return String.format("%-18s %-18s %-27s %-17s %-30s",
                 (numberProductsTotal),
                 (numberProductsToBeRemoved),
                 averageDaysUntilVerfall.orElse(-1),

@@ -15,10 +15,10 @@
     <name>Weinservice</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <java.version>17</java.version>
-        <spring-cloud.version>2023.0.0-RC1</spring-cloud.version>
-    </properties>
+    <!--    <properties>-->
+    <!--        <java.version>17</java.version>-->
+    <!--        <spring-cloud.version>2023.0.0-RC1</spring-cloud.version>-->
+    <!--    </properties>-->
 
     <build>
         <plugins>

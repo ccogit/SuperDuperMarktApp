@@ -30,9 +30,9 @@ public class Wein extends Produkt implements Serializable {
 
     @Override
     public Double getPreisAktuell() {
-        /*
-        Der Qualitäts-Zuschlag bei Wein ändert sich nicht über die Zeit, aber er existiert.
-        Abgeleitet von der Startqualität bleibt der initiale Qualitätszuschlag erhalten.
+    /*
+        Qualitäts-Zuschlag bei Wein ändert sich nicht über die Zeit.
+        Berechnung des konstanten Zuschlags ueber Startqualität.
     */
         return vonAuslageEntfernen() ? 0.0 :
                 Math.round(100 * (getGrundpreis() + 0.1 * getStartQualitaet())) / 100.00;

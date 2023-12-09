@@ -58,4 +58,9 @@ public class ProduktServices {
                         ))));
     }
 
+    public Map<ProduktTyp, Long> getAnzahlEinheitenJeProduktTyp() {
+        return getBestand().stream()
+                .collect(groupingBy(Produkt::getProduktTyp, counting()));
+    }
+
 }

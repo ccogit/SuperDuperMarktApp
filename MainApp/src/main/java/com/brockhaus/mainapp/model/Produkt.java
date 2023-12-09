@@ -44,7 +44,8 @@ public abstract class Produkt implements Serializable {
     @CsvBindByName(column = "AUSLIEGEND")
     @Builder.Default
     private Boolean ausliegend = true;
-    
+
+    @CsvBindByName(column = "PRODUKT_TYP")
     private ProduktTyp produktTyp;
 
     public abstract ProduktTyp getProduktTyp();
@@ -72,10 +73,11 @@ public abstract class Produkt implements Serializable {
     }
 
     public String toString() {
-        return String.format("%-5s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %-17s",
+        return String.format("%-5s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %-17s",
                 id,
                 bezeichnung,
                 getQualitaetAktuell(),
+                getPunktabweichungVonSollNiveau(),
                 verfallDatum,
                 getTageBisVerfall(),
                 grundpreis,
