@@ -21,26 +21,11 @@ public class KaeseCreator extends Creator {
 
     @Override
     public Produkt konfiguriereProdukt(Produkt produkt) {
-        produkt.setBezeichnung(erzeugeZufallsBezeichnung());
-        produkt.setStartQualitaet(erzeugeZufallsStartQualitaet());
-        produkt.setVerfallDatum(erzeugeZufallsVerfallDatum());
-        produkt.setGrundpreis(erzeugeZufallsGrundpreis());
+        produkt.setBezeichnung(faker.name().lastName());
+        produkt.setStartQualitaet(random.nextInt(80, 130));
+        produkt.setVerfallDatum(LocalDate.now().plusDays(random.nextInt(50, 100)));
+        produkt.setGrundpreis(Math.round(100 * random.nextDouble(2, 25)) / 100.00);
         return produkt;
-    }
-
-    @Override
-    public double erzeugeZufallsGrundpreis() {
-        return Math.round(100 * random.nextDouble(2, 25)) / 100.00;
-    }
-
-    @Override
-    public LocalDate erzeugeZufallsVerfallDatum() {
-        return LocalDate.now().plusDays(random.nextInt(50, 100));
-    }
-
-    @Override
-    public int erzeugeZufallsStartQualitaet() {
-        return random.nextInt(80, 130);
     }
 
     @Override
