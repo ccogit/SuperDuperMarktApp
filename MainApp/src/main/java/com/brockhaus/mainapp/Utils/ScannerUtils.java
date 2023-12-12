@@ -4,6 +4,7 @@ import com.brockhaus.mainapp.Starter;
 import com.brockhaus.mainapp.model.Kaese;
 import com.brockhaus.mainapp.model.Produkt;
 import com.brockhaus.mainapp.model.Wein;
+import com.brockhaus.mainapp.model.enums.ProduktTyp;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class ScannerUtils {
 
     public static List<Produkt> getProdukteFromCsv() throws FileNotFoundException {
         CsvToBean<Produkt> csvReader = new CsvToBeanBuilder(new BufferedReader(new FileReader(fileName)))
-                .withType(Starter.produktTyp.equals("Wein") ? Wein.class : Kaese.class)
+                .withType(Starter.typ.equals(ProduktTyp.WEIN) ? Wein.class : Kaese.class)
                 .withSeparator(',')
                 .withIgnoreLeadingWhiteSpace(true)
                 .withIgnoreEmptyLine(true)

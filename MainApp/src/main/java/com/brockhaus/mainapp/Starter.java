@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.brockhaus.mainapp.model.enums.ProduktTyp.KAESE;
+
 @Component
 @Getter
 @Setter
@@ -46,8 +48,7 @@ public class Starter implements CommandLineRunner {
 
     /* CSV */
     public static String fileName = "C:\\Data\\Lebenslauf_Transcript\\Stellenausschreibungen\\BrockhausVersicherungen\\SuperDuperMarktApp\\MainApp\\src\\main\\resources\\Produkte.csv";
-    public static String produktTyp = "Kaese";
-    public static ProduktTyp typ = ProduktTyp.KAESE;
+    public static ProduktTyp typ = KAESE; // Typ der einzulesenden Produkte. Mögliche Werte: WEIN, KAESE
 
     @Override
     public void run(String... args) throws IOException, InterruptedException {
@@ -57,7 +58,6 @@ public class Starter implements CommandLineRunner {
         System.out.println(System.lineSeparator() + "Via Faker erzeugte Einheiten: " + produktServices.getAnzahlEinheitenJeProduktTyp());
         leseProdukteViaCSV();
         getUserInput();
-
     }
 
     public void befuelleRegale(Creator creator, Integer anzahlEinheiten) {
