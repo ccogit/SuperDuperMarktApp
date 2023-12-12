@@ -47,7 +47,7 @@ public class ReportsGenerator {
         produktServices.getAktuellenBestandGroupedByTypDetails().forEach((k, v) -> {
             System.out.println(NEW_LINE + "---" + k + "---");
             v.forEach((b, l) -> {
-                String headline = b ? "Verfallene Produkte" : "Nicht verfallene Produkte";
+                String headline = b ? "Von Auslage zu entfernende Produkte" : "Gute Produkte";
                 System.out.println(NEW_LINE + "-" + headline + "-" + NEW_LINE);
                 System.out.printf("%-5s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %-17s %n",
                         "ID",

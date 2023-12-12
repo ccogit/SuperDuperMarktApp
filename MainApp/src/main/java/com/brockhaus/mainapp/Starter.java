@@ -70,9 +70,10 @@ public class Starter implements CommandLineRunner {
         List<Produkt> produkteCsvImport = ScannerUtils.getProdukteFromCsv();
         produkteCsvImport.forEach(produkt -> {
             switch (produkt.getProduktTyp()) {
-                case WEIN -> weinCreator.speicherProdukt(weinCreator.konfiguriereProdukt(weinCreator.erzeugeProdukt()));
+                case WEIN ->
+                        weinCreator.speicherProdukt(produktServices.kopiereWerte(weinCreator.erzeugeProdukt(), produkt));
                 case KAESE ->
-                        kaeseCreator.speicherProdukt(kaeseCreator.konfiguriereProdukt(kaeseCreator.erzeugeProdukt()));
+                        kaeseCreator.speicherProdukt(produktServices.kopiereWerte(kaeseCreator.erzeugeProdukt(), produkt));
             }
         });
         System.out.println("Via Csv erzeugte Einheiten: " + produkteCsvImport.stream().collect(Collectors.groupingBy(Produkt::getProduktTyp, Collectors.counting())));

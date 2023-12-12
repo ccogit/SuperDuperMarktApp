@@ -63,4 +63,12 @@ public class ProduktServices {
                 .collect(groupingBy(Produkt::getProduktTyp, counting()));
     }
 
+    public Produkt kopiereWerte(Produkt produkt, Produkt produktMitWerten) {
+        produkt.setBezeichnung(produktMitWerten.getBezeichnung());
+        produkt.setStartQualitaet(produktMitWerten.getStartQualitaet());
+        produkt.setGrundpreis(produktMitWerten.getGrundpreis());
+        produkt.setVerfallDatum(produktMitWerten.getVerfallDatum());
+        return produkt;
+    }
+
 }
